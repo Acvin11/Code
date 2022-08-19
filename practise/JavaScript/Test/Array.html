@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Click the button to create an array, call the new ucase() method, and display the result.</p>
+
+<button onclick="myFunction()">Try it</button>
+
+<p id="demo"></p>
+
+<script>
+Array.prototype.myUcase = function() {
+  var i;
+  for (i = 0; i < this.length; i++) {
+    this[i] = this[i].toUpperCase();
+  }
+};
+
+Array.prototype.myLcase = function() {
+  var j;
+  for(j = 0 ; j < this.length; j++)
+  {
+      this[j] = this[j].toLowerCase();
+
+  }
+}
+
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
+var otherfruits = ["Muskmelon", "Cherry"];
+var n = fruits.includes("Mango");
+fruits.myUcase();
+
+fruit = fruits.toString();
+fruit = fruits.toString();
+
+document.write(fruit+"<br>");
+document.write(fruits+"<br>");
+document.write( fruits.join(" | ")+"<br>");
+document.write("Mango found :"+n+"<br>");
+
+fruits.shift();
+document.write("Shift "+fruits+"<br>");
+fruits.unshift("WATEMELON");
+document.write("Un-Shift "+fruits+"<br>");
+
+fruits.pop();
+document.write("Pop "+fruits+"<br>");
+fruits.push("CHEERY");
+document.write("Push "+fruits+"<br>");
+fruits.sort();
+document.write("Push "+fruits+"<br>");
+
+var Joined_String = fruits.join(" | ")+"<br>";
+Joined_String.toLocaleLowerCase()
+document.write("Joined_String :"+Joined_String+"<br><br><br>");
+
+fruits.sort();
+
+fruits.splice(2,0,"BANANA", "MUSKMELON");
+document.write("SPLICE-INSERTION : "+fruits+"<br>");
+
+//fruits.splice(1,3);
+//document.write("SPLICE -DELETION : "+fruits+"<br>");
+
+document.write("Fruit : "+fruits+"<br>");
+document.write("OtherFruits : "+otherfruits+"<br>");
+
+allFruits = fruits.concat(otherfruits);
+document.write("Concat : "+allFruits+"<br>");
+
+allFruits.myLcase();
+document.write("Concat : "+allFruits+"<br>");
+
+</script>
+
+</body>
+</html>
