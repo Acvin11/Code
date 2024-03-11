@@ -38,7 +38,7 @@ def reading_csv():
         print("Start executing...")
         
         # Define the path to your CSV file
-        csv_file_path = file_location + 'project_3_foodCartAnalysis\\hotel_booking.csv'
+        csv_file_path = file_location + 'project_3_hotelBooking\\hotel_booking.csv'
 
         # Define the name of your Google Spreadsheet
         spreadsheet_name = 'Acvin'
