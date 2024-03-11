@@ -1,3 +1,0 @@
-git config --system http.sslcainfo "E:\Software\Git\mingw64\ssl\certs\ca-bundle.crt"
-
-git clone https://github.com/Acvin11/Code.git
