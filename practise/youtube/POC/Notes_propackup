@@ -1,0 +1,307 @@
+====================  INSTALLERS FOR WINDOWS  ============================================================
+
+   http://repo.postgrespro.ru/pgpro-13/win/
+   http://repo.postgrespro.ru/pgpro-13/win/PostgresPro_13.5.1_64bit_Setup.exe
+   http://repo.postgrespro.ru/pgpro-13/win/pg-probackup-std-13-2.5.4.msi
+
+
+====================  LOGGING IN PSQL SHELL  ============================================================
+  
+   Granting necessary permissions for pg catalog:
+ 
+      BEGIN;
+      CREATE ROLE backup WITH LOGIN;
+      GRANT USAGE ON SCHEMA pg_catalog TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.current_setting(text) TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.set_config(text, text, boolean) TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.pg_is_in_recovery() TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.pg_start_backup(text, boolean, boolean) TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.pg_stop_backup(boolean, boolean) TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.pg_create_restore_point(text) TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.pg_switch_wal() TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.pg_last_wal_replay_lsn() TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.txid_current() TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.txid_current_snapshot() TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.txid_snapshot_xmax(txid_snapshot) TO backup;
+      GRANT EXECUTE ON FUNCTION pg_catalog.pg_control_checkpoint() TO backup;
+      COMMIT;
+  
+  
+======================== PROBACKUP BACKUP ====================================================
+
+   Here's a structured format for the provided steps:
+
+1. **Check `pg_probackup` Version**:
+   
+   pg_probackup version
+   
+
+2. **Initialize Backup Directory**:
+   
+   pg_probackup init -B C:\myStorage
+   
+
+3. **Add PostgreSQL Instance to Backup**:
+   
+   pg_probackup add-instance -B C:\myStorage --instance=db1 --pgdata="C:\Program Files\PostgresPro\13\data"
+   
+
+   - **If the above command throws an error** (ERROR: Could not open file "C:/Program/global/pg_control" for reading: No such file or directory):
+     - **Step 1**: Create a folder 'Program' in C drive.
+     - **Step 2**: Go to `C:\Program Files\PostgresPro\13\data` and copy the 'global' folder.
+     - **Step 3**: Paste the 'global' folder in the Program folder created in C drive `C:\Program`.
+
+4. **Show Backup Information**:
+   
+   pg_probackup show -B C:\myStorage
+   
+
+5. **Make Changes in `postgres.conf`**:
+   - Edit the `postgres.conf` file of PostgreSQL installation to include the following configurations:
+     conf
+     archive_mode = on
+     archive_timeout = 0
+     wal_level = replica  
+     archive_command = 'pg_probackup archive-push -B C:\myStorage --instance=db2 --wal-file-path %p --wal-file-name %f'
+     max_wal_senders = 10
+     hot_standby = on
+     full_page_writes = on
+     
+
+6. **Restart PostgreSQL Service**:
+   - Restart the PostgreSQL service to apply the changes made in `postgres.conf`.
+
+7. **Login to PostgreSQL Shell**:
+   - Open a separate shell and log in to PostgreSQL using the following command:
+     
+     psql -h localhost -p 5432 -U postgres
+     
+
+8. **Creating Databases and Tables**:
+   - Create databases `testdb2` and `testdb`, and populate them with tables and data.
+
+9. **Backup the Database**:
+   
+   set PGPASSWORD=admin && pg_probackup backup -B C:\myStorage --instance=db2 -b FULL --stream -d testdb -h localhost -p 5434 -U postgres -w
+   
+
+10. **Validate the Backup**:
+    
+    pg_probackup validate -B C:\myStorage --instance=db2 -b FULL
+    
+
+Ensure that you have the necessary permissions and backups before performing these actions, as they involve critical operations that can lead to data loss if not executed properly.
+   
+   
+   
+ ======================================  PROBACKUP RESTORE ================================================ 
+      
+  Here are the steps in a structured format:
+
+1. **Drop the databases `testdb` and `testdb2`**:
+   sql
+   DROP DATABASE testdb;
+   DROP DATABASE testdb2;
+   
+
+2. **Stop the PostgreSQL service**:
+   This step depends on your operating system and how PostgreSQL is managed. For example, on Linux, you might use:
+   
+   sudo systemctl stop postgresql
+   
+
+3. **Move the contents of the data directory to some other location**:
+   This step involves relocating the data directory of PostgreSQL to a different location. Ensure that PostgreSQL service is stopped before performing this action. The exact command depends on your operating system and the current location of your PostgreSQL data directory.
+
+4. **Restore the backup using `pg_probackup`**:
+   
+   pg_probackup restore -B C:/myStorage --instance=db2 -R -I lsn
+   
+
+5. **Restart the PostgreSQL service**:
+   After restoring the backup, you need to restart the PostgreSQL service. The command for this varies depending on your operating system. For example, on Linux, you might use:
+   
+   sudo systemctl start postgresql
+   
+
+Ensure that you have appropriate permissions and backups before performing these actions, as they involve critical operations that can lead to data loss if not executed properly.
+
+ ============================= CATCH UP FOR STREAMING ==================================================
+  
+ 
+  Here are the steps converted into a proper format:
+
+1. **Initiate catch-up replication using `pg_probackup`**:
+   
+   pg_probackup catchup --source-pgdata="C:/Program Files/PostgresPro/13/data" --destination-pgdata="<server:name>:/catchup" -p 5432 -d testdb -U postgres --stream --backup-mode=FULL
+   
+
+2. **Another catch-up replication command with additional options**:
+   
+   pg_probackup catchup -b FULL --source-pgdata="C:/Program Files/PostgresPro/13/data" --destination-pgdata="<server:name>:/catchup" -p 5432 -d testdb -U postgres --stream --threads=3
+   
+
+3. **Optional: Share the destination folder on `vxindia` with the name `sharedfolder`.**
+
+4. **Remove the old PostgreSQL installation using `yum`**:
+   
+   yum remove postgres\*
+   
+
+=======================  Postgres Pro installation  ==============================================
+
+(Store in specific)
+ - wget https://repo.postgrespro.ru/pgpro-13/keys/pgpro-repo-add.sh
+ - chmod +x pgpro-repo-add.sh
+ - rpm -ivh pgpro-repo-add.sh
+ - yum install postgrespro-std-13
+ - yum install pg-probackup-*
+ - pg-setup service start 
+ - pg-setup initdb
+ - pg-setup service stop (required when we make changes postgre.conf to start/stop service)
+
+
+Symbolic in 221  : libpq.so -> /usr/lib64/libpq.so.5
+
+======================== Linux Backup ===========================================================
+
+Here are the steps converted to a proper format:
+
+1. Change ownership of the `wal_archive` directory recursively to `postgres:postgres`:
+   
+   sudo chown postgres:postgres -R wal_archive
+   
+
+2. Check the version of `pg_probackup`:
+   
+   /opt/pgpro/std-13/bin/pg_probackup version
+   
+
+3. Initialize the backup catalog in the specified directory `/myStorage/`:
+   
+   /opt/pgpro/std-13/bin/pg_probackup init -B /myStorage/
+   
+
+4. Add a new PostgreSQL instance named `db1` to the backup catalog:
+   
+   /opt/pgpro/std-13/bin/pg_probackup add-instance -B /myStorage/ --instance=db1 --pgdata=/var/lib/pgpro/std-13/data/
+   
+
+5. Display information about backups in the backup catalog:
+   
+   /opt/pgpro/std-13/bin/pg_probackup show -B /myStorage/
+   
+
+6. Restore a PostgreSQL instance named `db1` from the backups using the specified recovery method (`-R`) and target recovery timeline (LSN):
+   
+   /opt/pgpro/std-13/bin/pg_probackup restore -B /myStorage/ --instance=db1 -R -I lsn
+   
+
+7. Perform a full backup of the `postgres` database using `pg_probackup`. Provide the necessary authentication (`PGPASSWORD=admin`) and connection details (`-h localhost -p 5432 -U postgres -w`):
+   
+   PGPASSWORD=admin /opt/pgpro/std-13/bin/pg_probackup backup -B /myStorage/ --instance=db1 -b FULL --stream -d postgres -h localhost -p 5432 -U postgres -w
+   
+
+8. Validate the backups of the `db2` instance in the backup catalog:
+   
+   /opt/pgpro/std-13/bin/pg_probackup validate -B /myStorage/ --instance=db2 -b FULL
+   
+
+9. Delete old backups for the `psql01` instance, keeping at least 1 redundant backup and a retention window of 10 backups. Remove any expired backups:
+   
+   pg_probackup-13 delete -B /var/lib/pgbackup --instance psql01 --retention-redundancy=1 --retention-window=10 --delete-expired
+   
+
+These steps outline the process of managing backups using `pg_probackup` in PostgreSQL.
+
+ ===================================================================================================================
+ 
+Here are the steps converted to a proper format:
+
+1. Initiate a catch-up process using `pg_probackup` to stream WAL files from the source PostgreSQL data directory located at `C:/Program Files/PostgresPro/13/data` to the destination PostgreSQL data directory located at `<server:name>:/catchup`:
+  
+
+   pg_probackup catchup --source-pgdata="C:/Program Files/PostgresPro/13/data" --destination-pgdata="<server:name>/catchup" -p 5432 -d postgres -U postgres --stream --backup-mode=FULL --remote-host=<server:name> --remote-user=root -j 4
+   
+
+This command streams WAL files from the source PostgreSQL instance to the destination PostgreSQL instance for the purpose of catch-up replication. Adjustments can be made to the source and destination paths, as well as other parameters, based on specific requirements.
+
+
+====================== Similar Issues Encoutered =================================================
+Similar issue on github
+   ERROR: WAL segment could not be streamed in 300 seconds #430
+      https://github.com/postgrespro/pg_probackup/issues/430
+
+=================================================================================================
+
+PGPASSWORD=admin pg_basebackup -h localhost -p 5432 -U postgres -Ft -Xn -D -
+
+PGPASSWORD=admin pg_basebackup -h localhost -p 5432 -U postgres -D /myStorage/basebackup/ -Ft -P
+
+PGPASSWORD=admin pg_basebackup -h localhost -p 5432 -U postgres  -D /myStorage/basebackup/ -Ft -Xf -z -P 
+
+================================================================================================
+Tar :
+PGPASSWORD=admin pg_basebackup -h localhost -p 5432 -U postgres  -D /myStorage/basebackup/ -Ft -Xs -P
+
+Plain:
+PGPASSWORD=admin pg_basebackup -h localhost -p 5432 -U postgres  -D /myStorage/basebackup/ -Fp -Xs -P
+
+==================== PR  ===============================================
+
+git reset --soft `git merge-base origin/master mysql_defect_etrack`
+git commit  
+   press enter
+      (Message \n Incident:4069725)
+   :wq
+git push --force-with-lease
+
+Changes done for Bugfix : using ss command over netstat command  as netstat command causing failure in suse
+Incident:4083986
+
+git checkout master
+git pull
+git merge master origin/master
+git checkout feature/postgres_agent
+git pull
+git merge feature/postgres_agent master
+git commit
+git push
+
+================================= Postgres Netackup agent commands ===============================
+
+#Note this for learning purpose only
+Linux:
+./nbpgsql -o backup -s FULL -b nonlvm -d /usr/NBPostgreSQLAgent/testfunctionality  -a /usr/NBPostgreSQLAgent/password -l /usr/NBPostgreSQLAgent
+
+./nbpgsql -o backup -s FULL -b lvm  -a /usr/NBPostgreSQLAgent/pgpassword
+
+
+./nbpgsql -o backup -s FULL -b pg_basebackup -d /usr/NBPostgreSQLAgent/testfunctionality  -a /usr/NBPostgreSQLAgent/password -l /usr/NBPostgreSQLAgent  -g 7
+
+
+./nbpgsql -o backup -s FULL -b pg_dump -dbname nbdb -d /usr/NBPostgreSQLAgent/testfunctionality
+
+./nbpgsql -o backup -s FULL -b pg_probackup -d /myStorage/ -a /usr/NBPostgreSQLAgent/password -l /usr/NBPostgreSQLAgent  -instance db1
+
+
+Windows:
+  - nbpgsql.exe  -o backup -b pg_basebackup -s INCR -a C:\pgpassword.txt
+  - nbpgsql.exe  -o backup -b pg_basebackup -s FULL -a C:\pgpassword.txt
+
+  - nbpgsql.exe -o backup -s FULL -b pg_dump -d C:\test -a C:\pgpassword.txt -dbname pratikdb
+
+  - nbpgsql.exe -o backup -s FULL -b pg_probackup -d C:\myStorage -a C:\pgpassword.txt -instance db1
+
+
+===================Symbolic link=====================================
+ 
+ rm /usr/pgsql-12/lib/libpq.so.5
+
+
+ ====================  Validate the PR =================================
+
+git validate-pull-request -r src -i <id>
+git validate-pull-request -r src -i <id> --post
+
+

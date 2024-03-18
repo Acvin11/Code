@@ -1,0 +1,259 @@
+sudo yum install postgresql14-server
+sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
+sudo systemctl start postgresql-14
+sudo systemctl enable postgresql-14
+
+=======================
+
+[18:18] Acvin Gonsalves (CS)
+/net/nbstore/tools/bin/nbbuild --plat linuxR_x86 dbext/opensourcedbs/postgresql
+/net/nbstore/tools/bin/nbbuild --plat linuxR_x86 dbext/opensourcedbs/mysql
+/net/nbstore/tools/bin/nbbuild --plat AMD64 dbext/opensourcedbs/postgresql
+/net/nbstore/tools/bin/nbbuild --plat AMD64 dbext/opensourcedbs/mysql
+
+
+========================================================================
+
+  /usr/openv/netbackup/bin/nbpgsql -o backup -S dl380g10-109v56.vxindia.veritas.com -P agary -s FULL -portnum 5432 -b pg_dump -l /home/  -delwal 0 -instance postgres-linux-5432  -pgid acvin -dbname acvin -d /myStorage2/
+
+ /usr/openv/netbackup/bin/nbpgsql -o query -C dl380g10-109v56.vxindia.veritas.com -S dl380g10-109v56.vxindia.veritas.com -P agary  -u root
+
+ /usr/openv/netbackup/bin/nbpgsql -o restore -S dl380g10-109v56.vxindia.veritas.com -C dl380g10-109v56.vxindia.veritas.com -t /myStorage/ -id 1657793691 -P agary   -u root  -portnum 5432
+
+ 
+===========================================
+
+  /usr/openv/netbackup/bin/nbpgsql -o backup -S dl380g10-109v56.vxindia.veritas.com -P agary -s FULL -portnum 5432 -b pg_dump -l /home/  -delwal 0 -instance postgres-linux-5432  -pgid acvin -dbname testdb 
+
+  /usr/openv/netbackup/bin/nbpgsql -o query -C dl380g10-109v56.vxindia.veritas.com -S dl380g10-109v56.vxindia.veritas.com -P agary  -u postgres
+
+
+  /usr/openv/netbackup/bin/nbpgsql -o restore -S dl380g10-109v56.vxindia.veritas.com -C dl380g10-109v56.vxindia.veritas.com -t /myStorage/ -id 1658167107  -P agary  -u postgres  -portnum 5432
+
+
+
+ =====================================================================
+
+ /usr/openv/netbackup/bin/nbpgsql -o backup -S dl380g10-109v56.vxindia.veritas.com -P agary -s FULL -portnum 5432 -b pg_dump -l /home/  -delwal 0 -instance postgres-linux-5432  -pgid acvin -dbname testdb 
+
+  /usr/openv/netbackup/bin/nbpgsql -o query -C dl380g10-109v56.vxindia.veritas.com -S dl380g10-109v56.vxindia.veritas.com -P agary  -u postgres
+
+
+  /usr/openv/netbackup/bin/nbpgsql -o restore -S dl380g10-109v56.vxindia.veritas.com -C dl380g10-109v56.vxindia.veritas.com -t /myStorage/ -id 1659638012  -P agary  -u postgres  -portnum 5432
+
+
+
+  ======================================================================
+ scp  dbext/opensourcedbs/postgresql/linuxR_x86_3.10.0/nbpgsql root@dl380g10-109v56.vxindia.veritas.com:/usr/openv/netbackup/bin
+
+ scp -r /myStorage2/* root@dl380g10-109v55.vxindia.veritas.com:/root/mainline/incr/nonstream/
+
+=======================Windows====================
+
+
+nbmysql -o backup -C dl380g10-109v13.vxindia.veritas.com -S dl380g10-109v13.vxindia.veritas.com -P agary -s FULL -portnum 5433 -b pg_dump -l /home/  -delwal 0 -instance postgres-linux-5432  -pgid acvin -dbname postgres 
+
+nbmysql -o query -C dl380g10-109v13.vxindia.veritas.com -S dl380g10-109v13.vxindia.veritas.com -P agary
+
+
+nbmysql -o restore -C dl380g10-109v13.vxindia.veritas.com -S dl380g10-109v13.vxindia.veritas.com -portnum 5433 -P agary -t "C:\test" -id 1656919111  
+
+
+
+ \\10.84.127.254\results\
+ results/NB/2022_07/2771938/PACKAGES
+
+
+ If  MySQL library path is not present
+If MySQL database name is not present for backup
+If Invalid library path given for MySQL backup"
+ If Failed to retrieve credentials for MySQL backup
+  Please set LIB_MYSQL_CLIENT
+
+
+  #####################################################################
+Git commands to sync master with local branch
+#####################################################################
+git checkout master
+git pull
+git merge master origin/master
+git checkout feature/testLibPath
+git pull
+git merge Suse_pgsql_restore master
+git push
+
+
+1. Shell :  (port and user)  => create test db => table => records
+2. exit 
+3. POC  : mysqldump  command form and fire  >.sqlx
+4. Shell :  (port and user)  => drop test db
+5. POC  : mysqldump  restore command form and fire  >.sqlx  and records recover in shell 
+
+
+Hey sagar, we tried priting logs for argumanets from restore 
+===================================================
+
+scp /home/agonsalv/mainline/poc_codes/mysql_service.cpp root@dl380g10-109v56.vxindia.veritas.com:/root/mainline/code/
+
+scp /home/agonsalv/mainline/mysqldump/src/dbext/opensourcedbs/postgresql/AutoRecovery.cpp  root@dl380g10-109v56.vxindia.veritas.com:/root/mainline/code/
+
+cp  -r /myStorage/*  /root/mainline/restoreFile/
+
+====================================================
+
+
+/usr/openv/netbackup/bin/nbpgsql -o backup -S dl380g10-109v56.vxindia.veritas.com -P agary -s FULL -portnum 5432 -b pg_basebackup -l /home/  -delwal 0 -instance postgres-linux-5432  -pgid acvin
+
+
+/usr/openv/netbackup/bin/nbpgsql -o query -C dl380g10-109v56.vxindia.veritas.com -S dl380g10-109v56.vxindia.veritas.com -P agary  -u postgres
+
+/usr/openv/netbackup/bin/nbpgsql -o query -C dl380g10-109v56.vxindia.veritas.com -S dl380g10-109v56.vxindia.veritas.com -P agary  -u root
+
+/usr/openv/netbackup/bin/nbpgsql -o restore -S dl380g10-109v56.vxindia.veritas.com -C dl380g10-109v56.vxindia.veritas.com -t /myStorage/ -id 1658756946 -P agary   -u postgres  -portnum 5432
+
+/usr/openv/netbackup/bin/nbpgsql -o restore -S dl380g10-109v56.vxindia.veritas.com -C dl380g10-109v56.vxindia.veritas.com -t /myStorage/ -id 1659029510 -P agary   -u root  -portnum 5432
+
+==================================================
+
+PGPASSWORD=Gyp.s8m psql -h localhost -p 5444 -U enterprisedb -t -A -c "show data_directory;"
+
+C:\Users\Administrator>set PGPASSWORD=Gyp.s8m&& psql -h localhost -p 5444 -U enterprisedb -t -A -c "show data_directory;"
+C:/Program Files/edb/as10/data
+
+
+
+su - postgres -c "/usr/pgsql-14/bin/pg_ctl -D  '/var/lib/pgsql/14/data' start"
+
+pg_ctl.exe  -D "C:/Program Files/edb/as10/data" status
+
+pg_ctl -D "C:\Windows\System32\cmd.exe" status
+
+
+C:/Program Files/edb/as10/data
+
+===========================================================
+
+Normal postgres issue
+
+Linux 
+    
+    Tried :  PG_ctl stop  =>  posgtres service stops 
+              su - postgres -c "/usr/pgsql-14/bin/pg_ctl -D  '/var/lib/pgsql/14/data' -l logfile stop"
+
+             On  PG_ctl start  =>  posgtres service doesnt start 
+              su - postgres -c "/usr/pgsql-14/bin/pg_ctl -D  '/var/lib/pgsql/14/data' -l logfile start"
+
+             if try  systemctl command to start  is env get corrupted 
+
+
+We can  log in into  shell and get data directory for same
+PGPASSWORD=Gyp.s8m psql -h localhost -p 5434 -U postgres -t -A -c "show data_directory;"
+
+
+Also we take backup it gets successfully excuted
+
+
+
+Windows :
+set PGPASSWORD=Gyp.s8m && psql -h localhost -p 5434 -U postgres -t -A -c "show data_directory;"
+
+
+pg_ctl -D  'C:\Program Files\PostgreSQL\13' -l logfile status
+
+
+alter system set restore_command='cp %p /var/lib/edb/as12/archive/%f';
+
+
+
+
+
+
+=====================================================
+
+Corrupt postgres :  lVM mount
+systemctl stop  postgresql-14.service
+rm -rf /pginst/postgresql_data/*
+rm -rf /pginst/archivedir/*
+cp -r /pginst/backup/* /pginst/postgresql_data/
+sudo chown -R postgres:postgres /pginst
+systemctl start  postgresql-14.service
+systemctl status  postgresql-14.service
+
+
+
+=======================================
+
+Corrupt postgres :
+systemctl stop  postgresql-14.service
+rm -rf /var/lib/pgsql/14/data/*
+cp -r  /var/lib/pgsql/14/backup/*  /var/lib/pgsql/14/data
+sudo chown -R postgres:postgres  /var/lib/pgsql/14/
+rm -rf /pginst/archivedir/*
+systemctl start  postgresql-14.service
+systemctl status  postgresql-14.service
+
+
+
+=======================================
+
+
+PGPASSWORD=Gyp.s8m psql -h localhost -p 5432 -U postgres -t -A -c "alter system set restore_command='cp /pginst/archivedir/%f %p';"
+systemctl restart  postgresql-14.service
+systemctl status  postgresql-14.service
+
+systemctl stop  postgresql-14.service
+systemctl status  postgresql-14.service
+rm -rf /var/lib/pgsql/14/data/*
+rm -rf /pginst/archivedir/*
+cp -r /myStorage/* /var/lib/pgsql/14/data
+touch /var/lib/pgsql/14/data/recovery.signal
+sudo chown -R postgres:postgres  /var/lib/pgsql/14/data/
+
+
+systemctl start  postgresql-14.service
+systemctl status  postgresql-14.service
+
+
+XCOPY C:\demo\* D:\work\april /s /i
+
+
+ Xcopy C:\mainline\myStorage\*  C:\mainline\dumpDir\ /s /i
+
+
+erase  C:\mainline\dumpDir\* /S /Q > NUL 2>&1
+
+
+
+/usr/openv/netbackup/bin/nbmysql -o restore -C dl380g10-108v33.vxindia.veritas.com -S dl380g10-109v53.vxindia.veritas.com -p 3306 -t /test_mbckup -i 1658996985 -u mysql -a "/root/password/a.txt"
+
+
+
+
+/pginst/postgresdata/test/my.tar
+
+pos = find (my.tar)
+pos = find (postgresdata)
+
+
+C:\Program Files\PostgreSQL\14\data
+
+attrib -S <restore_path>/*.* /S /D
+attrib -S -r C:\Program Files\PostgreSQL\14\data\*.* /S /D
+
+
+
+
+stream_compression :
+ tar -C "C:\Program Files\PostgreSQL\14\data" -xvf "C:\mainline\218_restoredata\pgbase_backup\with_compression\stream_full\pg_basebackup_1659717106.tar.gz"
+
+non stream_compression  full:
+  tar -C "C:\server\archivedir" -xvf "C:\mainline\218_restoredata\pgbase_backup\with_compression\non_stream_full\pgarchive\simple\pg_wal.tar.gz"
+
+  tar -C "C:\Program Files\PostgreSQL\14\data" -xvf "C:\mainline\218_restoredata\pgbase_backup\with_compression\non_stream_full\pgarchive\simple\base.tar.gz" 
+
+
+   type nul > "C:\Program Files\PostgreSQL\14\data\recovery.signal"
+
+
+
+C:\mainline\218_restoredata\pgbase_backup\with_compression\non_stream_incr\pgarchive\simple

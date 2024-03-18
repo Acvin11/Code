@@ -1,0 +1,478 @@
+cd kvm engg
+ windows 
+ v
+
+ zode
+ putty
+ Mobaxterm - rs dev machine (coding) 
+ notepad++
+ respo  cloning 
+=======================================================
+
+nbbuild - linux
+rmtbld -windows
+bpt - build packaging  (linux and windows) 
+======================================================
+
+set PGPASSWORD=admin&& psql -h localhost -p 5432 -U postgres -t -A -c "SELECT datname FROM pg_database WHERE datname <> ALL ('{template0,template1}')"
+
+=====
+
+68453
+
+Acvin Godfree Gonsalves
+
+============================================
+yum module disable mysql
+yum clean all
+reset
+
+yum module disable mysql
+
+
+sudo yum install mysql-server
+sudo systemctl enable mysqld
+sudo systemctl start mysqld
+sudo systemctl status mysqld
+sudo mysql_secure_installation
+
+
+Password : Gyp.s8mes
+============================================
+grep -H '^#port' postgresql*conf 
+
+root@dl380g10-109v45 /]# find -type f -name mysql.sock.lock
+find: ‘./run/user/1000/gvfs’: Permission denied
+./var/lib/mysql/mysql.sock.lock
+
+cat /run/mysqld/mysqld.pid
+3810
+
+export PATH=$PATH:/usr/bin/mysql
+
+mysql -h localhost -p 3306
+
+mysql -h 127.0.0.1 -P 3307 -u user_name -p database_name
+mysql --host=localhost --port=9999 mysql -u root -p --execute="show tables;"
+====================================================================
+password : Gym.s8mes
+mysql -h localhost -u root -p -P 3306
+https://www.tecmint.com/change-default-mysql-mariadb-port-in-linux/
+
+================================================
+Python  gzip  pipe  link 
+- https://stackoverflow.com/questions/19118551/generate-zip-stream-without-using-temp-files
+----------
+How to quickly embed python in your C++ Application
+- https://medium.datadriveninvestor.com/how-to-quickly-embed-python-in-your-c-application-23c19694813
+
+================================================FULL BACKUP=========================================================
+
+Backup Vm : dl380g10-109v43.vxindia.veritas.com 
+EXSI  machine name :  dl380g10-109v43_core_backup
+IP : 10.210.168.209
+HostName : test 
+Password : Gyp.s8m
+
+Postgress 14 : PSWD : admin
+Mysql 8 : PSWD :Gyp.s8mes
+
+
+Netbackup Master
+dl380g10-109v44.vxindia.veritas.com
+10.210.168.209
+
+
+Netbackup client
+dl380g10-109v48.vxindia.veritas.com
+10.210.168.213
+
+
+
+=====================================================================================================================
+Stash/repo link
+
+https://stash.veritas.com/
+
+
+
+For installing netbackup
+
+https://confluence.community.veritas.com/display/HU/Install+NBU+Master+On+Windows
+
+
+
+Building code using nbbuild
+
+https://confluence.community.veritas.com/pages/viewpage.action?spaceKey=Samurai&title=Building+NetBackup+from+source
+
+
+
+[12:15 PM] Girish Joshi (CS)
+
+http://rmnwiki.rmnus.sen.symantec.com/wiki/Tools/ssh#Connecting_without_password_prompts
+
+
+
+To download VS code
+
+https://code.visualstudio.com/download#
+
+Download Visual Studio Code - Mac, Linux, Windows
+
+Visual Studio Code is free and available on your favorite platform - Linux, macOS, and Windows. Download Visual Studio Code to experience a redefined code editor, optimized for building and debug...
+
+
+
+To install VS code
+
+https://confluence.community.veritas.com/pages/viewpage.action?pageId=260577089
+
+==============================
+
+- db level commands
+- channelize chuck without storing con disk 
+- credental from master and clients 
+- Web UI (not use this) & BPHDB script  (Avdut)
+- Probackup 
+- recover -> tranverse catalog 
+
+=====================
+
+Bphdb
+
+-Full
+- lvm
+- backup   =>   agent code 
+- g 7 
+
+===================================
+Note :  
+- what will be restore format? 
+- what will be inputs from api for restore
+- LVM / Vss will ge through command
+
+-o  operation   backup/restore 
+-s  state       FULL/INCR
+-b  snapshots   LVM/NON LVM
+-d  destination folder path
+-g  compression level 0-9
+
+
+
+1900 : JAVA GUI
+=====================================
+Install pro backup 
+https://github.com/postgrespro/pg_probackup/blob/master/README.md
+
+https://postgrespro.github.io/pg_probackup/#pbk-setting-up-continuous-wal-archiving
+https://postgrespro.github.io/pg_probackup/#pbk-creating-backup
+
+
+
+
+Netbackup Master
+dl380g10-109v44.vxindia.veritas.com
+10.210.168.209
+
+
+Netbackup Acvin Client : 10.210.168.221
+
+Netbackup Pratik Client : 10.210.168.220
+
+
+
+
+dl380g10-109v55.vxindia.veritas.com
+
+10.210.168.220
+
+Not assigned
+
+dl380g10-109v56.vxindia.veritas.com
+
+10.210.168.221
+
+Not assigned
+
+=============
+GW: 10.210.160.1
+
+Subnet: 255.255.240.0:
+
+DNS 172.16.8.32 /33
+
+
+
+During VM Configuration:
+
+DNS Servers: 172.16.8.32, 172.16.8.33
+
+Search Domain: vxindia.veritas.com
+=============================================
+My remote Desktop
+10.210.165.140
+DL380G10-109V13\Administrator
+==================================================
+
+Netbackup Client setup
+1. mkdir /pristine /usr/openv
+2. mount 10.210.73.181:/newbuilds /pristine
+3. cd pristine/<desired_NB_build_path> ||| skip
+4. groupadd nbwebgrp
+5. useradd -g nbwebgrp -c 'NetBackup Web Services account' -d /usr/openv/wmc nbwebsvc && usermod -a -G nbwebgrp acvin
+6. ulimit -n 99999
+8. cat /proc/sys/kernel/sem   skip 
+9. echo 300 307200 1024 > /proc/sys/kernel/sem
+10. sysctl -a | grep kernel.sem
+11. ./install
+12. rpm -qa | grep VRTS
+13. cd /usr/openv/java/
+14. ./jnbSA
+
+
+===============
+ls -la ~/ | more
+
+
+=================
+
+/usr/openv/netbackup/bin/jnbSA &
+
+
+dl380g10-109v13.vxindia.veritas.com
+
+/usr/openv/netbackup/bin/goodies/netbackup stop
+/usr/openv/netbackup/bin/goodies/netbackup start
+
+window (file://DL380G10-109V13/window)
+
+
+
+cp -r mainline/src/src/dbext/opensourcedbs/postgresql/*  cp -r mainline/new_src/src/dbext/opensourcedbs/postgresql
+
+
+
+=====================================================================================
+
+- draft mail 
+-  Commands execute  => Description with sreenshots
+-  Command problems =>  2/3  backlog catlog id and instance name  for starting up the process
+-  Tried in linux  -> show version failed 
+
+
+=========================
+- Exterior link se follow 
+
+
+- Understand code path 
+- Go through working models (our code)  - Try  out different policy 
+- Understanding GUI from UI team for end to end  => Api Team orienated
+
+- Parameter lvm or nonlvm/schudle / [port /name]  - Avdut  - Suggest Sequence of parameter
+
+
+=====================================================
+
+
+
+
+- Script  from notify script
+- BHPDB se script 
+- Modularity 
+
+
+Client Machine                                                               Server Machine
+Netbackup clent      <------------ policy & storage ---------------->   Java GUI (Netbackup server)
+LVM Postgress
+NBagent  -> Video Mk ->bsa (aniket)
+
+================================
+Probackup command
+
+    pg_probackup-14 init -B /root/myProBackup/
+
+    pg_probackup-14 add-instance -B /root/myProBackup/ --instance=db1  --pgdata=/var/lib/pgsql/14/data 
+    pg_probackup-14 del-instance -B /root/myProBackup/ --instance=db2  --pgdata=/var/lib/pgsql/14/data 
+    
+
+    pg_probackup-14 set-config -B /root/myProBackup/ --instance=db1
+    pg_probackup-14 show -B /root/myProBackup/    => To know ID
+
+    pg_probackup-14 backup -B /root/myProBackup/ --instance=db1 -b FULL
+
+
+
+
+    pg_probackup-14 set-backup -B /root/test/ --instance=db1 -i backup_id [option...]
+
+    
+    pg_probackup-14 show -B /root/test/
+
+
+    pg_probackup-14 set-backup -B /root/test/ --instance=db1 -i R7IFJQ --ttl=30d
+
+
+
+pg_hba.conf 
+
+find / -type f \( -name "pg_hba.conf"  )
+
+
+
+=============  error while loading shared libraries: libpq.so.5:  ================================
+
+find / -name libpq.so.5
+ln -s /opt/pgpro/std-13/lib/libpq.so.5 /usr/lib64/libpq.so.5
+pg_probackup-13  version
+
+
+======================= Pro postgres  installation  ==============================================
+
+rpm -ivh http://repo.postgrespro.ru/pgpro-13/keys/postgrespro-std-13.rhel.yum-13-0.3.noarch.rpm
+yum install postgrespro-std-13
+yum install pg-probackup-*
+
+pg-setup service start
+pg-setup initdb
+
+
+===================================================================================================
+    mkdir  /myStorage/
+
+    sudo chown postgres:postgres /myStorage/
+
+    /opt/pgpro/std-13/bin/pg_probackup version
+
+    /opt/pgpro/std-13/bin/pg_probackup init -B /myStorage/
+
+    /opt/pgpro/std-13/bin/pg_probackup  add-instance -B /myStorage/ --instance=db1  --pgdata=/var/lib/pgpro/std-13/data/
+    
+    /opt/pgpro/std-13/bin/pg_probackup show -B /myStorage/
+
+    PGPASSWORD=admin   /opt/pgpro/std-13/bin/pg_probackup backup -B /myStorage/ --instance=db1 -b FULL --stream -d postgres -h localhost -p 5432 -U postgres -w
+
+
+    PGPASSWORD=admin   /opt/pgpro/std-13/bin/pg_probackup backup -B /myStorage/ --instance=db1 -b PAGE --stream -d postgres -h localhost -p 5432 -U postgres -w
+
+
+    /opt/pgpro/std-13/bin/pg_probackup validate -B /myStorage/ --instance=db2 -b FULL 
+
+======================================================================================
+
+/myStorage/backups/db1/R7P4FP/database/pg_wal
+
+
+
+PGPASSWORD=admin   /opt/pgpro/std-13/bin/pg_probackup backup -B /myStorage/ --instance=db2 -b FULL --stream -p 5432 -U postgres -w
+
+
+    PGPASSWORD=admin   /opt/pgpro/std-13/bin/pg_probackup backup -B /myStorage/ --instance=db2 -b PAGE --stream -d acvindb -h localhost -p 5432 -U postgres -w
+
+
+    PGPASSWORD=admin   /opt/pgpro/std-13/bin/pg_probackup restore -B /myStorage/ --instance=db2 --recovery-target-time='2022-02-22 13:20:14'
+
+
+    pg_probackup-11 restore -B/pgdata/backup/--instance pg_test --recovery-target-time='2019-10-14 23:33:1
+
+
+
+
+set PGPASSWORD=admin&&  /opt/pgpro/std-13/bin/pg_probackup backup -B /myStorage/ --instance=db1 -b FULL -d acvindb -h localhost -p 5432 -U admin -w
+
+
+
+=================================================
+
+
+'"/opt/pgpro/std-13/bin/pg_probackup" archive-push -B "/root/myBackup/" --instance=db1--wal-file-path %p --wal-file-name %f'
+===================================
+Document saved
+ ln -s /opt/pgpro/std-13/lib/libpq.so.5 libpq.so
+PATH :  /usr/NBPostgreSQLAgent
+
+
+
+./nbpgsql -o backup -s FULL -b pg_probackup -d /myStorage/ -a /usr/NBPostgreSQLAgent/password -l /usr/NBPostgreSQLAgent
+
+
+ >root.030222_00001.log
+
+
+[1:48 PM] Harshwardhan Sharma (CS)
+user.name=harshwardhan.sharma
+user.email=harshwardhan.sharma@veritas.com
+
+[1:49 PM] Harshwardhan Sharma (CS)
+git config --global user.name "Acvin.gonsalves"
+git config --global user.email "acvin.gonsalves@veritas.com"
+
+==============================Netbackup Backup==============================
+
+Netbackup Backup
+./nbpgsql -o backup -s FULL -b pg_probackup -d /myStorage/ -a /usr/NBPostgreSQLAgent/password -l /usr/NBPostgreSQLAgent -instance db1
+
+Netbackup Restore
+./nbpgsql -o restore -S dl380g10-109v13.vxindia.veritas.com -t /acvin/ -id 1646315081 -C dl380g10-109v56.vxindia.veritas.com
+
+
+
+
+==============================Postgre-pro==============================
+
+Backup:
+ PGPASSWORD=admin /opt/pgpro/std-13/bin/pg_probackup backup -B /myStorage/ --instance=db1 -b FULL --stream -d postgres -h localhost -p 5432 -U postgres -w
+
+Restore:
+ pg_probackup restore -B C:/myStorage --instance=db1 -R -I lsn 
+
+
+=================================Rahul windows VM=================
+10.210.168.218
+
+
+
+=================================Uninstall=================
+
+rpm -qa | grep -i vrt
+rpm -e VRTSnbpostgresqlagent-10.0.1.0-1646748132.x86_64
+
+/usr/openv/netbackup/bin/goodies/netbackup stop
+/usr/openv/netbackup/bin/goodies/netbackup start
+
+==================
+./nbpgsql -o backup -s FULL -b nonlvm -d /usr/NBPostgreSQLAgent/testfunctionality -a /usr/NBPostgreSQLAgent/password -l /usr/NBPostgreSQLAgent
+
+
+
+
+[4/29/2022 4:34 PM] Acvin Gonsalves (CS)
+\\10.210.73.181\Moved_public\public\Acvin\avdut
+
+[4/29/2022 4:42 PM] Avdhut Tupe (CS)
+Hi
+
+
+/usr/openv/netbackup/bin//libpq.so
+
+
+cd /pristine/NB_1001/NB_10.0.1_0117/NetBackup_10.0.1_LinuxR_x86_64
+
+run ./install
+
+/root/veritas_customer_registration_key.json
+
+KZN3-CDPR-8W3X-836P-638O-4F4K-4F77-794Z-PPP8-P
+
+
+
+
+net user nbwebsvc Gyp.s8m /add
+
+
+======================================================================
+ln -sf /usr/pgsql-13/lib/libpq.so.5.13 libpq.so
+
+========================================================================
+git validate-pull-request -r src -i 82816
+git validate-pull-request -r src -i 82816 --post

@@ -1,0 +1,146 @@
+Step for Postgresql backup using DataStore policy
+======================================================
+## Copy File into different network
+scp /home/ksinha/pgsql/src/cl/client/linuxR_x86_3.10.0/bprestore root@10.210.170.71:/usr/openv/netbackup/bin/
+
+## Build 
+/net/code/ovsrc/int/tools/bin/nbbuild --platform linuxR_x86 nb/daemon
+
+git clone https://stash.veritas.com/scm/nb/bsa_postgresql.git
+
+
+## cherry-pick command to get updated code
+git cherry-pick -ne 42359cf154ff3754bd0645335d6ec0a31085181e
+
+## goto client machine where pristine mount
+copy /pristine/BSAPOSTGRES/10.0/0004/0004_NetBackup_NBPostgreSQLAgent_10.0_linuxR_x86.tar.gz   paste somewhere
+
+## untar 0004_NetBackup_NBPostgreSQLAgent_10.0_linuxR_x86.tar.gz
+tar -xzf 0004_NetBackup_NBPostgreSQLAgent_10.0_linuxR_x86.tar.gz
+
+## goto /root/pgsql/NBPostgreSQLAgent_10.0_linuxR_x86 and run. This will install postgresql agent on client machine 
+rpm -ivh VRTSnbpostgresqlagent.rpm
+
+## After installation goto /usr/NBPostgreSQLAgent/
+copy nbpgsql and take backup somewhere
+
+## copy /usr/NBPostgreSQLAgent/I18N_EN to save orignal file
+## copy I18N_EN from rsv machine to client machine
+scp /home/ksinha/bsa_data/bsa_postgresql/nbpgsql/I18N_EN root@10.210.170.71:/usr/NBPostgreSQLAgent
+
+
+## make policy using java GUI, to communicate master and client
+
+## /usr/NBPostgreSQLAgent
+./nbpgsql -h
+-h for help
+this will create nbpgsql.conf file
+open and edit 
+MASTER_SERVER_NAME=dl380g10-108v37.vxindia.veritas.com
+POLICY_NAME=policy3
+NBPGSQL_LOG_LEVEL=4
+NBPGSQL_LOG_SIZE=10
+SNAPSHOT_SIZE=500MB
+
+PGSQL_LIB_INSTALL_PATH=/usr/NBPostgreSQLAgent
+(for this you need to run command in usr/NBPostgreSQLAgent:
+ ln -s /usr/pgsql-14/lib/libpq.so.5 libpq.so)
+
+##create lvm
+https://dl380g10-109.vxindia.veritas.com/ui/#/login
+
+##create lvm 
+## run command for disk check
+fdisk -l
+
+pvcreate /dev/sdc
+vgcreate configvg /dev/sdc
+
+lvcreate -L 15G -n config_lv /dev/configvg
+mkfs.ext4 /dev/configvg/config_lv
+mount -t ext4 /dev/configvg/config_lv /pginst
+
+
+cd /pginst
+df .
+mkdir postgresql_data
+sudo chown postgres:postgres -R postgresql_data 
+(data directory)
+
+cd /var/lib/pgsql/14/data/
+(get through ps -ef|grep -i postmaster)
+
+goto cd /pginst
+chown postgres:postgres /postgresql_data
+chmod -R 700 postgresql_data
+
+mkdir archivedir
+chown postgres:postgres archivedir
+
+su - postgres
+/usr/pgsql-14/bin/pg_ctl initdb -D /pginst/postgresql_data/
+exit
+(This will initiallize /pginst/postgresql_data, check inside this folder, files appear)
+
+sudo systemctl status postgresql-14
+vi /usr/lib/systemd/system/postgresql-14.service
+
+## set this path to Enviornment
+/pginst/postgresql_data
+
+systemctl daemon-reload
+sudo systemctl start postgresql-14
+sudo systemctl stop postgresql-14
+
+cd /pginst/postgresql_data/
+vi postgresql.conf
+archive_mode = on
+archive_command = 'test ! -f /pginst/archivedir/%f && cp %p /pginst/archivedir/%f'
+archive_timeout = 0 
+wal_level = replica  
+statement_timeout = 0
+sudo systemctl restart postgresql-14
+su - postgres -c psql
+show data_directory;
+show archive_command;
+\q
+====================Setup Done!!!!====================
+
+STep for Backup
+cd /usr/NBPostgreSQLAgent
+##run command
+./nbpgsql -o query
+./nbpgsql -o backup -s FULL -b lvm
+(add any size. eg: 500MB)
+
+## For nonlvm
+mkdir /pginst/sample
+./nbpgsql -o backup -s FULL -b nonlvm -d /pginst/sample -g 7
+
+
+## For restore
+./nbpgsql -o restore -S dl380g10-108v37.vxindia.veritas.com -t /home/kunal/scrp/ -C dl380g10-108v37.vxindia.veritas.com -id 1646735859
+
+
+
+git validate-pull-request -r src -i 79729
+git validate-pull-request -r src -i 79729 --post
+
+
+
+Remove extra system call function during merge conflict
+Incident:4077371     
+
+
+git reset --soft `git merge-base origin/master pgdump_changes`
+
+
+Raised a PR for pgdump merge conflict
+https://stash.veritas.com/projects/NB/repos/src/pull-requests/79819/builds
+
+
+git validate-pull-request -r src -i 79819
+git validate-pull-request -r src -i 79819 --post
+
+
+
