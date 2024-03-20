@@ -1,0 +1,51 @@
+
+div.gallery {
+    		margin-left: 40px;
+   		 border: 1px solid #ccc;
+    		float: left;
+    		overflow: auto;
+    		width: 200px;
+     		padding: 10px 10px;
+    		  resize: horizontal;
+		margin: 5.5px;
+		    width: 19%;
+	               box-shadow: 0 0 2px 1px rgba(0,0,0,0.8);
+}
+
+div.gallery:hover {
+    		border: 1px solid #777;
+}
+
+div.gallery img {
+		    width: 100%;
+ 		    height: auto;
+
+}
+
+div.desc {
+    	padding: 15px;
+   	 text-align: center;
+}
+
+
+
+fieldset.flied_al
+{
+	margin-left:30px;
+	margin-right:30px;
+	margin-top:20px;
+	margin-bottom:10px;
+	    border: 1px solid #31319b;
+		background-color:#f7e6ff;
+}
+
+h1#craft_heading
+{
+  	color:#252574;
+	font-size:50px;
+	margin-left:5px;
+}
+img#art
+{
+	margin-left:240px;
+}
