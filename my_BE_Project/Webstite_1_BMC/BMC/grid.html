@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>	
+	<link rel="stylesheet" href="dp.css" type="text/css">
+	<link rel="stylesheet" href="w3school.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="navigation.css" type="text/css">
+	<link rel="stylesheet" href="Online consultation.css" type="text/css">
+	<!-- image galery -->
+	<link rel="stylesheet" href="imagegallery.css" type="text/css">
+	<link rel="stylesheet" href="ex.css" type="text/css">
+<script>
+// Four images side by side
+function four() {
+    var elements = document.getElementsByClassName("column");
+    var i;
+    for (i = 0; i < elements.length; i++) {
+        elements[i].style.width = "25%";
+    }
+}
+
+// Two images side by side
+function two() {
+    var elements = document.getElementsByClassName("column");
+    var i;
+    for (i = 0; i < elements.length; i++) {
+        elements[i].style.width = "50%";
+    }
+}
+
+// Full-width images
+function one() {
+    var elements = document.getElementsByClassName("column");
+    var i;
+    for (i = 0; i < elements.length; i++) {
+        elements[i].style.width = "100%";
+    }
+}
+</script>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+header#header_shop1
+   {
+   background-image: url("head.jpg");
+   margin-right:1px;
+  margin-left:-4.5px;
+  }	
+
+footer.footer
+   {
+   margin-right:1px;
+   margin-left:0px;
+  }	
+
+
+.header {
+    text-align: center;
+   background-image: url("5.png");
+	  margin-left: 5px;
+    margin-right: 5px;
+
+ }
+.header1 {
+    text-align: right;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+.header2 {
+    text-align: center;
+   background-image: url("4.png");
+     margin-left: 5px;
+    margin-right: 5px;
+ }
+/* Create two equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+}
+
+.column img {
+    margin-top: 12px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.button {
+  padding: 5px 5px;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4d0099;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px black;
+}
+
+.button:hover {background-color:  #4d0099;}
+
+.button:active {
+  background-color: #7a00cc;
+  box-shadow: 0 2px #666;
+  transform: translateY(4px);
+}
+
+div.resize
+{
+	margin-left:20px;
+	margin-right:20px;
+	 padding: 13px 20px;
+        background-color:#fff3e6;
+}
+div#move
+{
+	margin-left:20px;
+	
+}
+		
+h1#Shopping{
+	font-family:Matura MT Script Capitals;
+	color:#7a00cc;
+	font-size:40px;
+ 	text-align: center;
+	}
+</style>
+<body>
+<header id="header_shop1">	
+<table width=100%>
+	
+	<tr>
+		<td>
+			<img src="BMC_logo.png" height=150px width=150px></img>
+		<th>	
+			<Center>
+			<h1> 
+				<b>
+				<p >
+					<font color="white" size="30"style="font-family:'Matura MT Script Capitals'">BMC : Art & Craft Portal
+					</font>
+				</p>
+				</b>
+			</h1>
+			</center>
+		<td align="right">
+			<img src="ashoka_pillar.png" height=150px width=100px align="right"></img>
+	</tr>
+</table>
+</header>
+</div>
+
+<div class="menu">
+     <ul>
+            <li><a href="acvin_copy.html" >Home</a></li>
+            <li><a href="event.html">Event</a></li>
+           <li><a href="gallery.html"class="active">Gallery</a></li>
+             <li><a href="about us.html">About us</a></li>
+            <li><a href="contact.html" >Contact us</a></li>
+     </ul>	
+</div>	
+<div class="header2">
+<h1 id="Shopping">Competitions Products</h1>
+<table>
+	<tr>
+		<td>	<a href="art_design.html">
+				<img src="art_logo.png" id="art"></img>
+			</a>
+		<td>	<a href="craft_Embroidery_&_Appliqué.html">
+				<img src="craft_logo.png" id="art" height=275px width=330px></img>
+			</a>
+	</tr>
+	<tr align="right">
+		<th>	<a href="art_design.html">
+						<h2><p style="font-family:'Jokerman'">ART</p></h2>
+					</a>
+		<th>	<a href="craft_Embroidery_&_Appliqué.html">
+						<h2><p style="font-family:'Jokerman'">CRAFT</p></h2>
+					</a>
+	</tr>
+</table>
+</div>
+
+<div class="header">
+	 <h1 id="Shopping">Exhibition</h1>
+	 <div class="resize">
+			
+			<div class="header1">
+				<button onclick="four()" class="button">Small Size</button>
+ 				<button onclick="two()"  class="button">Medium Size</button>
+  				<button onclick="one()"  class="button">Big Size</button>
+			</div>
+ 	<!-- Photo Grid -->
+	  <div class="row"> 
+
+ 		 <div class="column">
+  			  <img src="Events/e3.jpg" style="width:100%"><div id="move">ssaa</div>
+    			  <img src="Events/e2.jpg" style="width:100%"><div id="move">ssaa</div>
+    			  <img src="Events/e2.jpg" style="width:100%"><div id="move">ssaa</div>
+  		 </div>
+		 <div class="column">
+  			  <img src="Events/e3.jpg" style="width:100%"><div id="move">ssaa</div>
+    			  <img src="Events/e2.jpg" style="width:100%"><div id="move">ssaa</div>
+    			  <img src="Events/e2.jpg" style="width:100%"><div id="move">ssaa</div>
+  		 </div>
+		 <div class="column">
+  			  <img src="Events/e3.jpg" style="width:100%"><div id="move">ssaa</div>
+    			  <img src="Events/e2.jpg" style="width:100%"><div id="move">ssaa</div>
+    			  <img src="Events/e2.jpg" style="width:100%"><div id="move">ssaa</div>
+  		 </div>
+		 <div class="column">
+  			  <img src="Events/e3.jpg" style="width:100%"><div id="move">ssaa</div>
+    			  <img src="Events/e2.jpg" style="width:100%"><div id="move">ssaa</div>
+    			  <img src="Events/e2.jpg" style="width:100%"><div id="move">ssaa</div>
+  		 </div>
+ 	  </div>
+    </div>
+    <br>
+</div>
+
+<footer class="footer">
+      <table width="100%">
+	<tr>
+		<td><font size="4" color="white">Designed By-<b>APPdesigners</font>
+		<td align="right">	<a href="#" class="fa fa-facebook"></a>
+				        <a href="#" class="fa fa-whatsapp"></a>	
+				       <a href="#" class="fa fa-instagram"></a>
+	</tr>
+         </table>
+</footer>	
+
+</body>
+</html>
